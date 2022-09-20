@@ -1,0 +1,13 @@
+.imagePizzas img{
+    position: absolute;
+    height: 100px ;
+    width: 100px
+}
+.pizzas{
+    display: flex;
+    gap: 30px;
+    margin-bottom: 150px;
+}
+.ingredient{
+    margin: 0px;
+}
