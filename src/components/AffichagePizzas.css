@@ -3,6 +3,9 @@
     height: 100px ;
     width: 100px
 }
+.pizza{
+    margin-left: 10px;
+}
 .pizzas{
     display: flex;
     gap: 30px;

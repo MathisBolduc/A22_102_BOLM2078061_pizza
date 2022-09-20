@@ -15,7 +15,7 @@ const App = (props) => {
     { nom: 'Basilic', image: 8 },
     { nom: 'Piments forts', image: 9 },
     { nom: 'Champignons', image: 10 },
-  ];
+  ]; //devient LE state des ingredients donc mettre les states true false des ingredients la dedans
   const [PizzasNommees, setPizzasNommees] = useState ([
     {
       nomPizza: 'La Sauce',
@@ -124,8 +124,13 @@ const App = (props) => {
     console.log(isDisabled);
   };
   const [ingredientsPizza, setIngredientsPizza] = useState([]);
+
   const OnClickHandlerEnregistrer = () => {
     if (newPizza.trim() !== '') {
+      //avoir un seul state a entretenir ajouter seulement les true du tableau d'ingredient dans une variable pas state
+
+
+
       setIngredientsPizza([]);
       if (sauce === true) setIngredientsPizza(current => ([...current, Pizzas[0] ]));
       if (fromage === true) setIngredientsPizza(current => ([...current, Pizzas[1] ]));
@@ -137,6 +142,10 @@ const App = (props) => {
       if (basilic === true) setIngredientsPizza(current => ([...current, Pizzas[7] ]));
       if (piments === true) setIngredientsPizza(current => ([...current, Pizzas[8] ]));
       if (champignons === true) setIngredientsPizza(current => ([...current, Pizzas[9] ]));
+
+
+
+
       console.log(newPizza, ingredientsPizza);
       setPizzasNommees(current =>([{nomPizza:newPizza, ingredientsUnePizza:ingredientsPizza}, ...current]));
       //console.log(ingredientsPizza);
