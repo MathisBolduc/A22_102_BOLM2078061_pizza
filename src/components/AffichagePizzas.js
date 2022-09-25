@@ -1,11 +1,12 @@
 import './AffichagePizzas.css';
 const AffichagePizzas = (props) => {
+    console.log(props);
     return (
         <div className='pizzas'>
 
             
             {props.pizzas.map((pizza) => (
-                <div className='pizza'>
+                <div key={pizza.nomPizza}  className='pizza'>
                     <h2 key={pizza.nomPizza} >{pizza.nomPizza}</h2>
                     <div className=''>
 
