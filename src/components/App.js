@@ -1,9 +1,72 @@
 import Checklist from "./Checklist";
 import Pizza from "./Pizza";
+import Login from "./Login";
+import Details from "./Details";
 import AffichagePizzas from "./AffichagePizzas";
 import { useDebugValue, useState } from "react";
+import { RouterProvider, createBrowserRouter, Navigate, useNavigate } from 'react-router-dom';
 
 const App = (props) => {
+  
+  //const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+
+  const routes = !isAuthenticated ? [
+    {
+      path: '/login',
+      element: <Login />,
+      loader: () => (OnClickHandlerLogin)
+    },
+    {
+      path: '*',
+      element: <Navigate to="/login" replace />
+    }
+  ] : [
+    {
+      path: '/pizza',
+      element: <AffichagePizzas/>,
+      loader: () => (PizzasNommees),
+      children:[
+        {
+          element: <Details/>,
+          path:':pizzaIndex',
+          errorElement: <Navigate to="/pizza" replace/>,
+          loader: (data) => {
+            return(PizzasNommees[data.params.pizzaIndex])
+          }
+        },
+        {
+          element: <Pizza/>,
+          path:'creer',
+          errorElement: <Navigate to="/pizza" replace/>,
+          loader: () => ([
+            {
+              Pizzas:Pizzas
+            },
+            {
+              OnChangeHandler:OnChangeHandler
+            },
+            {
+              OnChangeHandlerPizza:OnChangeHandlerPizza
+            },
+            {
+              OnClickHandlerAnnuler:OnClickHandlerAnnuler
+            },
+            {
+              OnClickHandlerEnregistrer:OnClickHandlerEnregistrer
+            },
+            {
+              disabled: isDisabled
+            },
+            {
+              newPizza: newPizza
+            }
+      ]),
+        }
+      ]
+    }
+  ]
+
   const [Pizzas, setPizzas] = useState([
     { nom: 'Sauce', image: 1, state: false },
     { nom: 'Fromage', image: 2, state: false },
@@ -62,6 +125,7 @@ const App = (props) => {
     }))
   };
   const [newPizza, setNewPizza] = useState('');
+  const [newNom, setNewNom] = useState('lol');
   const [isDisabled, setIsDisabled] = useState(false);
 
   const OnChangeHandlerPizza = (e) => {
@@ -70,27 +134,31 @@ const App = (props) => {
     else setIsDisabled(false);
     console.log(isDisabled);
   };
+  const OnClickHandlerLogin = () => {
+    if (newNom !== '')setIsAuthenticated(true);
+  };
 
-  
+
   let ingredients = [];
-  const OnClickHandlerEnregistrer = () => {
+  const OnClickHandlerEnregistrer = (i) => {
     if (newPizza.trim() !== '') {
       ingredients = [];
       Pizzas.map((pizza) => {
         if (pizza.state) {
           ingredients.push(pizza);
-          
+          pizza.state = false;
         }
       });
       console.log(newPizza, ingredients);
       setPizzasNommees(current => ([{ nomPizza: newPizza, ingredientsUnePizza: ingredients }, ...current]));
+      //navigate('/pizza/0');
       setNewPizza('');
     }
   };
   const OnClickHandlerAnnuler = () => {
     if (newPizza.trim() !== '') {
       setNewPizza('');
-      Pizzas.map((pizza)=>{
+      Pizzas.map((pizza) => {
         pizza.state = false;
       });
     }
@@ -99,22 +167,22 @@ const App = (props) => {
 
 
   return (
-
-    <div>
-      <h1>Les Pizzas</h1>
-      <AffichagePizzas pizzas={PizzasNommees} />
-      <h1>
-        Créer ta pizza!
-      </h1>
-      <Checklist pizzas={Pizzas} OnChange={OnChangeHandler} ingredients={Pizzas} />
-      {/* <Button/> */}
-      <div>
-        <input onChange={OnChangeHandlerPizza} value={newPizza} type="text" className="Input" placeholder="Nommer votre pizza" />
-        <button onClick={OnClickHandlerEnregistrer} disabled={!isDisabled} >Enregistrer</button>
-        <button onClick={OnClickHandlerAnnuler}>Annuler</button>
-      </div>
-      <Pizza ingredients={Pizzas} pizzas={Pizzas} />
-    </div>
+    <RouterProvider router={createBrowserRouter([routes[0]])} />
+    // <div>
+    //   <h1>Les Pizzas</h1>
+    //   <AffichagePizzas pizzas={PizzasNommees} />
+    //   <h1>
+    //     Créer ta pizza!
+    //   </h1>
+    //   <Checklist pizzas={Pizzas} OnChange={OnChangeHandler} ingredients={Pizzas} />
+    //   {/* <Button/> */}
+    //   <div>
+    //     <input onChange={OnChangeHandlerPizza} value={newPizza} type="text" className="Input" placeholder="Nommer votre pizza" />
+    //     <button onClick={OnClickHandlerEnregistrer} disabled={!isDisabled} >Enregistrer</button>
+    //     <button onClick={OnClickHandlerAnnuler}>Annuler</button>
+    //   </div>
+    //   <Pizza ingredients={Pizzas} pizzas={Pizzas} />
+    // </div>
 
   );
 };
