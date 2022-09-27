@@ -1,13 +1,11 @@
 import './AffichagePizzas.css';
 import { useLoaderData, Link,Outlet  } from "react-router-dom";
-const AffichagePizzas = (props) => {
-    const pizzas = useLoaderData();
-    console.log(pizzas);
+const AffichagePizzas = ({PizzasNommees}) => {
     return (
         <div className='pizzas'>
 
-
-            {pizzas.map((pizza, index) => (
+            
+            {PizzasNommees.map((pizza, index) => (
                 <Link key={pizza.nomPizza + index} to={`/pizza/${index}`}>
                     <div key={pizza.nomPizza} className='pizza'>
                         <h2 key={pizza.nomPizza} >{pizza.nomPizza}</h2>
@@ -30,10 +28,10 @@ const AffichagePizzas = (props) => {
                     </div>
                 </Link>
             ))}
-            <Outlet/>
             <div>
                 <Link to="/pizza/creer"><h2>Créer</h2></Link>
             </div>
+            <Outlet/>
         </div>
     );
 };
