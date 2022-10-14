@@ -7,163 +7,181 @@ import { useDebugValue, useState } from "react";
 import { RouterProvider, createBrowserRouter, Navigate, useNavigate } from 'react-router-dom';
 
 const App = (props) => {
-  
+
   // const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
-  
+
   const [Pizzas, setPizzas] = useState([
-    { nom: 'Sauce', image: 1, state: false },
-    { nom: 'Fromage', image: 2, state: false },
-    { nom: 'Pepperonis', image: 3, state: false },
-    { nom: 'Poivrons verts', image: 4, state: false },
-    { nom: 'Oignon', image: 5, state: false },
-    { nom: 'Olives noires', image: 6, state: false },
-    { nom: 'Tomates cerises', image: 7, state: false },
-    { nom: 'Basilic', image: 8, state: false },
-    { nom: 'Piments forts', image: 9, state: false },
-    { nom: 'Champignons', image: 10, state: false }
+    { nom: 'Sauce', image: 1, state: false, prix: 0.75 },
+    { nom: 'Fromage', image: 2, state: false, prix: 0.85 },
+    { nom: 'Pepperonis', image: 3, state: false, prix: 1.00 },
+    { nom: 'Poivrons verts', image: 4, state: false, prix: 0.60 },
+    { nom: 'Oignon', image: 5, state: false, prix: 0.65 },
+    { nom: 'Olives noires', image: 6, state: false, prix: 0.50 },
+    { nom: 'Tomates cerises', image: 7, state: false, prix: 0.55 },
+    { nom: 'Basilic', image: 8, state: false, prix: 0.80 },
+    { nom: 'Piments forts', image: 9, state: false, prix: 1.25 },
+    { nom: 'Champignons', image: 10, state: false, prix: 0.70 }
   ]);
   const [PizzasNommees, setPizzasNommees] = useState([
     {
       nomPizza: 'La Sauce',
       ingredientsUnePizza:
-      [
-        { nom: 'Sauce', image: 1 }
-        ]
-      },
-      {
-        nomPizza: 'La pepperoni',
+        [
+          { nom: 'Sauce', image: 1 }
+        ],
+      cout: 10.75
+    },
+    {
+      nomPizza: 'La pepperoni',
       ingredientsUnePizza:
-      [
+        [
           { nom: 'Sauce', image: 1 },
           { nom: 'Fromage', image: 2 },
           { nom: 'Pepperonis', image: 3 }
-        ]
+        ],
+      cout: 12.60
     },
     {
       nomPizza: 'La ALL dressed',
       ingredientsUnePizza:
-      [
-        { nom: 'Sauce', image: 1 },
-        { nom: 'Fromage', image: 2 },
-        { nom: 'Pepperonis', image: 3 },
-        { nom: 'Poivrons verts', image: 4 },
-        { nom: 'Oignon', image: 5 },
-        { nom: 'Olives noires', image: 6 },
-        { nom: 'Tomates cerises', image: 7 },
-        { nom: 'Basilic', image: 8 },
-        { nom: 'Piments forts', image: 9 },
-        { nom: 'Champignons', image: 10 }
-      ]
+        [
+          { nom: 'Sauce', image: 1 },
+          { nom: 'Fromage', image: 2 },
+          { nom: 'Pepperonis', image: 3 },
+          { nom: 'Poivrons verts', image: 4 },
+          { nom: 'Oignon', image: 5 },
+          { nom: 'Olives noires', image: 6 },
+          { nom: 'Tomates cerises', image: 7 },
+          { nom: 'Basilic', image: 8 },
+          { nom: 'Piments forts', image: 9 },
+          { nom: 'Champignons', image: 10 }
+        ],
+      cout: 17.65
     },
-    
+
   ]);
-  
-  
+
+
+  const [coutPizza, setCoutPizza] = useState(10.00);
   const OnChangeHandler = (i) => {
+    setCoutPizza(10.00);
     setPizzas(current => current.map((pizza, index) => {
       return index !== i ? pizza : {
         ...pizza,
         state: !pizza.state
       };
-    }))
+    }))   
+    setPizzas(current => current.map((pizza) => {
+      if (pizza.state === true) {
+        CalculerCoutPizza(pizza.prix)
+        return pizza;
+      }
+      else return pizza;
+}))};
+
+  const CalculerCoutPizza = (prix) => {
+    setCoutPizza(current => current += prix);
+    //console.log(coutPizza);
   };
   const [newPizza, setNewPizza] = useState('');
-  const [isDisabled, setIsDisabled] = useState();
-  
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  let ingredients = [];
   const OnChangeHandlerPizza = (e) => {
     setNewPizza(e.target.value);
-    if (newPizza.trim() !== '' && ingredients !== null) setIsDisabled(true);
+    if (newPizza.trim() === '' && ingredients === []) setIsDisabled(true);
     else setIsDisabled(false);
-    console.log(isDisabled);
+    //console.log(isDisabled);
   };
   const OnClickHandlerLogin = (nom) => {
-    if (nom !== ''){
+    if (nom !== '') {
       setIsAuthenticated(true);
       console.log(isAuthenticated);
       // navigate('/pizza');
-      }
-    };
-    
-    
-    let ingredients = [];
-    const OnClickHandlerEnregistrer = (i) => {
-      if (newPizza.trim() !== '') {
-        ingredients = [];
-        Pizzas.map((pizza) => {
-          if (pizza.state) {
-            ingredients.push(pizza);
-            pizza.state = false;
-          }
-        });
-        console.log(newPizza, ingredients);
-        setPizzasNommees(current => ([{ nomPizza: newPizza, ingredientsUnePizza: ingredients }, ...current]));
-        //navigate('/pizza/0');
-        setNewPizza('');
-      }
-    };
-    const OnClickHandlerAnnuler = () => {
-      Pizzas.map((pizza) => {
-        pizza.state = false;
-      });
-      if (newPizza.trim() !== '') {
-        setNewPizza('');
-      }
-    };
-    
-    const routes = !isAuthenticated ? [
-      {
-        path: '/login',
-        element: <Login OnClick={OnClickHandlerLogin} />,
-        // errorElement: <Navigate to="/login" replace />,
-        },
-        {
-            path: '*',
-            element: <Navigate to="/login" replace />
-        }
-    ] : [
-      {
-        path: '/pizza',
-        element: <AffichagePizzas PizzasNommees={PizzasNommees}/>,
-        errorElement: <Navigate to="/pizza" replace/>,
-        children:[
-          {
-            element: <Details/>,
-            path:':pizzaIndex',
-            errorElement: <Navigate to="/pizza" replace/>,
-            loader: (data) => {
-              return(PizzasNommees[data.params.pizzaIndex])
-            }
-          },
-          // {
-          //   path:'*',
-          //   element:<Navigate to="/pizza" replace/>
-          // },
-        ]
-      }, 
-          {
-            element: <Pizza OnChangeHandler={OnChangeHandler} 
-              OnChangeHandlerPizza={OnChangeHandlerPizza} 
-              OnClickHandlerAnnuler={OnClickHandlerAnnuler} 
-              OnClickHandlerEnregistrer={OnClickHandlerEnregistrer}
-              disabled={isDisabled}
-              newPizza={newPizza}
-              Pizzas={Pizzas}
-            />,
-            path:'/pizza/creer',
-            // errorElement: <Navigate to="/pizza" replace/>
-          },
-      {
-        path: '/*',
-        element: <Navigate to="/pizza" replace/>      
-      }
+    }
+  };
 
-    ]
-    
-    
-    return (
-      <RouterProvider router={createBrowserRouter(routes)} />
+
+  const OnClickHandlerEnregistrer = (i) => {
+    if (newPizza.trim() !== '') {
+      ingredients = [];
+      Pizzas.map((pizza) => {
+        if (pizza.state) {
+          ingredients.push(pizza);
+          pizza.state = false;
+        }
+      });
+      console.log(newPizza, ingredients);
+      setPizzasNommees(current => ([{ nomPizza: newPizza, ingredientsUnePizza: ingredients, cout:coutPizza }, ...current]));
+      //navigate('/pizza/0');
+      setNewPizza('');
+      setCoutPizza(10.00);
+    }
+  };
+  const OnClickHandlerAnnuler = () => {
+    Pizzas.map((pizza) => {
+      pizza.state = false;
+    });
+    if (newPizza.trim() !== '') {
+      setNewPizza('');
+    }
+  };
+
+  const routes = !isAuthenticated ? [
+    {
+      path: '/login',
+      element: <Login OnClick={OnClickHandlerLogin} />,
+      // errorElement: <Navigate to="/login" replace />,
+    },
+    {
+      path: '*',
+      element: <Navigate to="/login" replace />
+    }
+  ] : [
+    {
+      path: '/pizza',
+      element: <AffichagePizzas PizzasNommees={PizzasNommees} />,
+      errorElement: <Navigate to="/pizza" replace />,
+      children: [
+        {
+          element: <Details />,
+          path: ':pizzaIndex',
+          errorElement: <Navigate to="/pizza" replace />,
+          loader: (data) => {
+            return (PizzasNommees[data.params.pizzaIndex])
+          }
+        },
+        // {
+        //   path:'*',
+        //   element:<Navigate to="/pizza" replace/>
+        // },
+      ]
+    },
+    {
+      element: <Pizza OnChangeHandler={OnChangeHandler}
+        OnChangeHandlerPizza={OnChangeHandlerPizza}
+        OnClickHandlerAnnuler={OnClickHandlerAnnuler}
+        OnClickHandlerEnregistrer={OnClickHandlerEnregistrer}
+        disabled={isDisabled}
+        newPizza={newPizza}
+        Pizzas={Pizzas}
+        prix={coutPizza}
+      />,
+      path: '/pizza/creer',
+      // errorElement: <Navigate to="/pizza" replace/>
+    },
+    {
+      path: '/*',
+      element: <Navigate to="/pizza" replace />
+    }
+
+  ]
+
+
+  return (
+    <RouterProvider router={createBrowserRouter(routes)} />
     // <div>
     //   <h1>Les Pizzas</h1>
     //   <AffichagePizzas pizzas={PizzasNommees} />
@@ -179,7 +197,7 @@ const App = (props) => {
     //   </div>
     //   <Pizza ingredients={Pizzas} pizzas={Pizzas} />
     // </div>
-    
-    );
-  };
+
+  );
+};
 export default App;

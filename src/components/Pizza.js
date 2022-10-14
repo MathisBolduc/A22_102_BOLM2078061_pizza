@@ -26,11 +26,13 @@ const Pizza = (props) => {
                 <img src={`/img/image${props.Pizzas[9].state ? props.Pizzas[9].image : 'o'}.png`} alt="" />
             </div>
             <div>
-
+                <div>
+                    <h3>{props.prix.toFixed(2)}$</h3>
+                </div>
                 <div className='button' >
                     <input onChange={props.OnChangeHandlerPizza} value={props.newPizza} type="text" className="Input" placeholder="Nommer votre pizza" />
                     <Link to="/pizza/0">
-                        <button  onClick={() => props.OnClickHandlerEnregistrer(0)} disabled={props.isDisabled} >Enregistrer</button>
+                        <button  onClick={() => props.OnClickHandlerEnregistrer(0)} disabled={props.disabled} >Enregistrer</button>
                     </Link>
                     <button onClick={props.OnClickHandlerAnnuler}>Annuler</button>
                 </div>

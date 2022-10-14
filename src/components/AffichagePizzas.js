@@ -25,6 +25,9 @@ const AffichagePizzas = ({PizzasNommees}) => {
                             </div>
 
                         </div>
+                        <div>
+                            <h3>{pizza.cout.toFixed(2)}</h3>
+                        </div>
                     </div>
                 </Link>
             ))}
