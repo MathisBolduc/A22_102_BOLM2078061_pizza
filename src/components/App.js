@@ -2,6 +2,8 @@ import Checklist from "./Checklist";
 import Pizza from "./Pizza";
 import Login from "./Login";
 import Details from "./Details";
+import Panier from "./Panier";
+import Commandes from "./Commandes";
 import AffichagePizzas from "./AffichagePizzas";
 import { useDebugValue, useState } from "react";
 import { RouterProvider, createBrowserRouter, Navigate, useNavigate } from 'react-router-dom';
@@ -72,14 +74,15 @@ const App = (props) => {
         ...pizza,
         state: !pizza.state
       };
-    }))   
+    }))
     setPizzas(current => current.map((pizza) => {
       if (pizza.state === true) {
         CalculerCoutPizza(pizza.prix)
         return pizza;
       }
       else return pizza;
-}))};
+    }))
+  };
 
   const CalculerCoutPizza = (prix) => {
     setCoutPizza(current => current += prix);
@@ -114,7 +117,7 @@ const App = (props) => {
         }
       });
       console.log(newPizza, ingredients);
-      setPizzasNommees(current => ([{ nomPizza: newPizza, ingredientsUnePizza: ingredients, cout:coutPizza }, ...current]));
+      setPizzasNommees(current => ([{ nomPizza: newPizza, ingredientsUnePizza: ingredients, cout: coutPizza }, ...current]));
       //navigate('/pizza/0');
       setNewPizza('');
       setCoutPizza(10.00);
@@ -127,6 +130,39 @@ const App = (props) => {
     if (newPizza.trim() !== '') {
       setNewPizza('');
     }
+  };
+
+  const [commandes, setCommandes] = useState([]);
+
+  const OnClickHandlerEnregistrerPanier = (cout) => {
+    if (panier.length !== 0) {      
+      setCommandes(current => ([{panier: panier, coutTotal: cout}, ...current]));
+      setPanier(current => []);
+      //console.log("commande +1")
+    }
+  };
+
+  const [panier, setPanier] = useState([]);
+  const OnClickHandlerPanier = (i) => {
+    setPanier(current => {
+      if (current.find(pizza => pizza.nomPizza === PizzasNommees[i].nomPizza) == null)
+      {
+        return ([
+          {nomPizza: PizzasNommees[i].nomPizza,
+          qte: 1,
+          cout: PizzasNommees[i].cout},
+          ...current
+        ])
+      } else {
+        return current.map((pizza) => {
+          if (pizza.nomPizza === PizzasNommees[i].nomPizza) {
+            return {...pizza, qte: pizza.qte + 1 }
+          } else {
+            return pizza;
+          }
+        })
+      }
+    })
   };
 
   const routes = !isAuthenticated ? [
@@ -142,7 +178,7 @@ const App = (props) => {
   ] : [
     {
       path: '/pizza',
-      element: <AffichagePizzas PizzasNommees={PizzasNommees} />,
+      element: <AffichagePizzas PizzasNommees={PizzasNommees} onClickPanier={OnClickHandlerPanier} />,
       errorElement: <Navigate to="/pizza" replace />,
       children: [
         {
@@ -152,6 +188,12 @@ const App = (props) => {
           loader: (data) => {
             return (PizzasNommees[data.params.pizzaIndex])
           }
+        },
+        {
+          element: <Panier panier={panier} 
+          OnClickHandlerEnregistrerPanier={OnClickHandlerEnregistrerPanier}/>,
+          path: 'panier',
+          errorElement: <Navigate to="/pizza" replace />,
         },
         // {
         //   path:'*',
@@ -171,6 +213,11 @@ const App = (props) => {
       />,
       path: '/pizza/creer',
       // errorElement: <Navigate to="/pizza" replace/>
+    },
+    {
+      element: <Commandes commandes={commandes}
+      OnClickHandlerAnnuler={OnClickHandlerAnnuler}/>,
+      path: '/pizza/commandes'
     },
     {
       path: '/*',

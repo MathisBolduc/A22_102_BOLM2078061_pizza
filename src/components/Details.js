@@ -16,7 +16,7 @@ const Details = props => {
 
                 {pizza.ingredientsUnePizza.map((ingredient) => (
                     <li className='ingredient' key={ingredient.nom}>
-                        {ingredient.nom}
+                        {ingredient.nom}  
                     </li>
                 ))}
                 </ul>

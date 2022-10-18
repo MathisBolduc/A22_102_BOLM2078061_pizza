@@ -34,7 +34,9 @@ const Pizza = (props) => {
                     <Link to="/pizza/0">
                         <button  onClick={() => props.OnClickHandlerEnregistrer(0)} disabled={props.disabled} >Enregistrer</button>
                     </Link>
-                    <button onClick={props.OnClickHandlerAnnuler}>Annuler</button>
+                    <Link to="/pizza/0">
+                    <button onClick={() => props.OnClickHandlerAnnuler()}>Annuler</button>
+                    </Link>
                 </div>
             </div>
         </div>

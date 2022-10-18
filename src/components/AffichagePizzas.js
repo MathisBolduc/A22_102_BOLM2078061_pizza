@@ -1,21 +1,24 @@
 import './AffichagePizzas.css';
-import { useLoaderData, Link,Outlet  } from "react-router-dom";
-const AffichagePizzas = ({PizzasNommees}) => {
+import { useLoaderData, Link, Outlet } from "react-router-dom";
+const AffichagePizzas = ({ PizzasNommees, onClickPanier }) => {
     return (
         <div className='pizzas'>
 
-            
+
             {PizzasNommees.map((pizza, index) => (
-                <Link key={pizza.nomPizza + index} to={`/pizza/${index}`}>
-                    <div key={pizza.nomPizza} className='pizza'>
+                <div key={pizza.nomPizza} className='pizza'>
+                    <Link key={pizza.nomPizza + index} to={`/pizza/${index}`}>
                         <h2 key={pizza.nomPizza} >{pizza.nomPizza}</h2>
+                        <div>
+                            <h3>{pizza.cout.toFixed(2)}</h3>
+                        </div>
                         <div className=''>
 
                             {/* {pizza.ingredientsUnePizza.map((ingredient) => (
-                            <p className='ingredient' key={ingredient.nom}>
-                            {ingredient.nom}
-                            </p>
-                        ))} */}
+                                <p className='ingredient' key={ingredient.nom}>
+                                {ingredient.nom}
+                                </p>
+                            ))} */}
 
                             <div className="imagePizzas">
                                 <img src="/img/image0.png" alt="" />
@@ -25,16 +28,24 @@ const AffichagePizzas = ({PizzasNommees}) => {
                             </div>
 
                         </div>
-                        <div>
-                            <h3>{pizza.cout.toFixed(2)}</h3>
-                        </div>
-                    </div>
-                </Link>
+                    </Link>
+                    <button onClick={() => onClickPanier(index)} className="panierAffichage">
+                        <span className="material-symbols-outlined">
+                            shopping_cart
+                        </span>
+                    </button>
+                </div>
             ))}
             <div>
                 <Link to="/pizza/creer"><h2>Créer</h2></Link>
             </div>
-            <Outlet/>
+            <div>
+                <Link to="/pizza/commandes"><h2>Commandes</h2></Link>
+            </div>
+            <div>
+                <Link to="/pizza/panier"><h2>Mon panier</h2></Link>
+            </div>
+            <Outlet />
         </div>
     );
 };
