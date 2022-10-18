@@ -3,17 +3,64 @@
     height: 100px ;
     width: 100px
 }
+.imagePizzasDetail img{
+    position: absolute;
+    height: 270px ;
+    width: 270px
+}
 .pizza{
     margin-left: 10px;
+    width: 130px;
+    height: 300px;
 }
 .pizzas{
     display: flex;
+    flex-direction: column;
     gap: 30px;
     margin-bottom: 150px;
 }
 .ingredient{
-    margin: 0px;
+    margin-top: 265px;
 }
 .panierAffichage{
-    margin-top: 100px;
+    margin-top: 110px;
 }
+li{
+    list-style: none;
+}
+.buttonsPizzas{
+    display: flex;
+    gap: 30px;
+}
+.buttonsPizzas a:hover{
+    display: flex;
+    gap: 30px;
+    text-decoration:underline ;
+}
+.flexPizzas{
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+button{
+    border: 1px solid black;
+}
+.home{
+    display: flex;
+}
+.liPanier{
+    display: flex;
+    gap: 100px;
+    justify-content: flex-start;
+}
+.outlet{
+    background-color: rgb(250, 193, 86);
+    width: 500px;
+    height:auto;
+    padding-left: 30px;
+}
+

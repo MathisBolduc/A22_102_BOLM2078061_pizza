@@ -136,7 +136,7 @@ const App = (props) => {
 
   const OnClickHandlerEnregistrerPanier = (cout) => {
     if (panier.length !== 0) {      
-      setCommandes(current => ([{panier: panier, coutTotal: cout}, ...current]));
+      setCommandes(current => ([...current,{panier: panier, coutTotal: cout}]));
       setPanier(current => []);
       //console.log("commande +1")
     }
